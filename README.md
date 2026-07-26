@@ -45,7 +45,7 @@ The scripthook gives you access to a full SDK for working with the game, world a
 <details> 
 <summary>Script to spawn in Joker near the player</summary>
 
-```cs
+```csharp
 using BmSDK;
 using BmSDK.BmGame;
 using BmSDK.BmScript;
@@ -55,21 +55,18 @@ public class DemoScript : Script
 {
     public override void OnKeyDown(Keys key)
     {
-        if (key == Keys.J)
-        {
-            var playerPawn = Game.GetPlayerPawn();
+        if (key != Keys.J) return;
 
-            // Load .upk with RCharacter_Joker
-            Game.LoadPackage("FunFair");
+        // Load UPK with Joker's assets
+        Game.LoadPackage("FunFair");
 
-            // Spawn in Joker
-            var newCharacter = new RPawnVillainThug(playerPawn.Location, playerPawn.Rotation);
-            newCharacter.InitCharacter(RCharacter_Joker.StaticClass());
+        // Spawn Joker in front of the player
+        var player = Game.GetPlayerPawn();
+        var joker = new RPawnVillainThug(player.Location, player.Rotation);
+        joker.InitCharacter(RCharacter_Joker.StaticClass());
 
-            // Move Joker in front of the player
-            var playerDir = playerPawn.Rotation.ToDirection() with { Z = 0 };
-            newCharacter.Move(playerDir * 100);
-        }
+        var playerDir = player.Rotation.ToDirection() with { Z = 0 };
+        joker.Move(playerDir * 100);
     }
 }
 ```
