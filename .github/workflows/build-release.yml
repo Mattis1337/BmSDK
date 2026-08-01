@@ -1,7 +1,6 @@
 name: "Create release build"
 
 on:
-  workflow_dispatch:
   workflow_call:
     inputs:
       tag_name:
@@ -12,6 +11,7 @@ on:
       artifact-id:
         description: "Artifact ID of final binary"
         value: ${{ jobs.create-package.outputs.artifact-id }}
+  workflow_dispatch:
 
 env:
   TARGET_REF: ${{ inputs.tag_name || github.sha }}
@@ -137,7 +137,7 @@ jobs:
       id: upload-artifact
       uses: actions/upload-artifact@v7
       with:
-        name: "BmSDK-${{ inputs.tag_name || github.sha }}"
+        name: "BmSDK-AC-${{ env.TARGET_REF}}"
         path: ${{ env.STAGING_DIR }}
         if-no-files-found: error
         compression-level: 9
